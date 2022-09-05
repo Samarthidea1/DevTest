@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-python-app
+      version: blue
+  template:
+    metadata:
+      name: hello-python-pod
+      labels:
+        app: hello-python-app
+        version: blue
+    spec:
+      containers:
+      - name: hello-python-container
+        image: samarth1311/helloapp:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: hello-python-svc
+  labels:
+    app: hello-python-app
+spec:
+  selector:
+    app: hello-python-app
+    version: blue
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
